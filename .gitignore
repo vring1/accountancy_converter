@@ -1,2 +1,5 @@
 converter/__pycache__/
+converter/build/
+converter/dist/
 *.log
+*.spec
