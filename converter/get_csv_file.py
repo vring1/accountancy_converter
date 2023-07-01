@@ -84,16 +84,18 @@ class get_csv_file_from_danske_bank:
         # Perform the drag action
         action_chains = ActionChains(driver)
         action_chains.click_and_hold(
-            handle).move_by_offset(-600, 0).release().perform()
-        time.sleep(1)
+            handle).move_by_offset(-500, 0).release().perform()
+        time.sleep(3)
         action_chains.click_and_hold(
-            handle).move_by_offset(-400, 0).release().perform()
+            handle).move_by_offset(-150, 0).release().perform()
+        time.sleep(3)
 
         # time.sleep(4)
         driver.execute_script(
             "window.scrollTo(0, document.body.scrollHeight);")
         # time.sleep(4)
 
+        # TODO: Scroll in to view rigtigt ovenover!
         # tryk gem som fil
         button = wait.until(EC.element_to_be_clickable(
             (By.XPATH, '//*[@id="db-tl-savetofile-button"]')))
