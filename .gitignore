@@ -3,3 +3,4 @@ converter/build/
 converter/dist/
 *.log
 *.spec
+*.xlsx

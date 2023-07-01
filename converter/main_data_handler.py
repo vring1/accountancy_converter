@@ -151,7 +151,7 @@ class main_data_handler:
                 b += 1
             for text in per_month_tekster:
                 if "Anna Lisa" in text:
-                    if per_month_beloeber[y] == '1.000,00':
+                    if per_month_beloeber[y] == '1.500,00' or per_month_beloeber[y] == '1.000,00':
                         huslejefraanna[y] = per_month_beloeber[y]
                     else:
                         mobilePay[y] = per_month_beloeber[y]
