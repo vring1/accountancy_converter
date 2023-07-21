@@ -4,18 +4,22 @@ import numpy as np
 
 
 class main_data_handler:
+    # handle data displayed on 'Nøgletal' sheet
     def handle_main_data(month, year):
+        # get relevant data given the right month and year
         relevant_data = raw_data_handler.get_right_dates(
             month, year, False, None, None)
+        # load in raw data, to get the following six categories used in 'Nøgletal'
         raw_data = raw_data_handler.handle_raw_data(
             month, year, False, None, None)
-        #resterende_total = raw_data_handler.handle_raw_data(month, year)[1]
         resterende_total = raw_data[1]
         fisOgBallade_total = raw_data[2]
         fastfood_total = raw_data[3]
         indkoeb_total = raw_data[4]
         mobilePay_total = raw_data[5]
         senesteSaldo = raw_data[6]
+
+        # data spread on months from the 28th to the 28th
         january_data = relevant_data[(relevant_data['Dato'].str.contains('.01.') & ~(relevant_data['Dato'].str.contains('31.01.'))
                                       & ~(relevant_data['Dato'].str.contains('30.01.')) & ~(relevant_data['Dato'].str.contains('29.01.'))
                                       & ~(relevant_data['Dato'].str.contains('28.01.'))) | relevant_data['Dato'].str.contains('28.12.'+str(year-1))
@@ -90,6 +94,7 @@ class main_data_handler:
         data_fordelt_på_months = [january_data, february_data, march_data, april_data, may_data,
                                   june_data, july_data, august_data, september_data, october_data, november_data, december_data]
 
+        # initialize empty months
         jan = ["", "", "", "", "", "", "", "", "", "",
                "", "", "", "", "", "", "", "", "", ""]
         feb = ["", "", "", "", "", "", "", "", "", "",
@@ -115,6 +120,7 @@ class main_data_handler:
         dec = ["", "", "", "", "", "", "", "", "", "",
                "", "", "", "", "", "", "", "", "", ""]
 
+        
         mo = 0
         temp = 0
         for months in data_fordelt_på_months:
