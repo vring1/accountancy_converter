@@ -120,11 +120,14 @@ class main_data_handler:
         dec = ["", "", "", "", "", "", "", "", "", "",
                "", "", "", "", "", "", "", "", "", ""]
 
-        
+        # initialize for month 0 (January)
         mo = 0
         temp = 0
+        # loop through each month's data
         for months in data_fordelt_på_months:
+            # loop through each column in the current month's data
             for column in data_fordelt_på_months[mo].columns:
+                # categorize data based on column names
                 if (column == "Bel�b" or column == "Beløb"):
                     per_month_beloeber = (data_fordelt_på_months[mo])[column]
                 if (column == "Tekst"):
@@ -134,6 +137,7 @@ class main_data_handler:
                 if (column == "Dato"):
                     per_month_datoer = (data_fordelt_på_months[mo])[column]
 
+            # initialize arrays
             mobilePay = np.empty(800, dtype=object)
             indkoeb = np.empty(800, dtype=object)
             løn = np.empty(800, dtype=object)
@@ -147,14 +151,19 @@ class main_data_handler:
             el = np.empty(800, dtype=object)
             internet = np.empty(800, dtype=object)
 
+            # variables for tracking data indices
             y = temp
             b = 0
+
+            # calculate the latest saldo of an account of a month
             for dato in per_month_datoer:
                 for i in range(27, 0, -1):
                     if f"{i}." in dato:
                         senesteSaldo[0] = per_month_saldos[y+b]
                         break
                 b += 1
+            
+            # categorize transactions based on keywords in the "Tekst" column
             for text in per_month_tekster:
                 if "Anna Lisa" in text:
                     if per_month_beloeber[y] == '1.500,00' or per_month_beloeber[y] == '1.000,00':
@@ -217,12 +226,15 @@ class main_data_handler:
                     fisOgBallade[y] = per_month_beloeber[y]
                 else:
                     resterende[y] = per_month_beloeber[y]
+                # update index for next month's data
                 y += 1
 
+                # format data and calculate sums used in the 'Nøgletal' sheet
                 su_new = [x.replace('.', '').replace(',', '.')
                           if x is not None else '0' for x in su]
                 su_float = pd.to_numeric(su_new)
                 su_sum = np.nansum(su_float)
+
                 løn_new = [x.replace('.', '').replace(
                     ',', '.') if x is not None else '0' for x in løn]
                 løn_float = pd.to_numeric(løn_new)
@@ -283,6 +295,8 @@ class main_data_handler:
                 indtægtialt = su_sum + løn_sum + boligstøtte_sum+huslejefraanna_sum
                 forskeliudgiftindtægt = indtægtialt - \
                     (fasteudgifter_sum - alleandrekontobevægelser)
+                
+                # set the values for each month
                 if mo == 0:
                     jan = ["", str(forskeliudgiftindtægt).replace('.', ','), str(senesteSaldo_sum).replace('.', ','), "", "", str(indtægtialt).replace('.', ','), str(su_sum).replace('.', ','), str(løn_sum).replace('.', ','),
                            str(boligstøtte_sum).replace('.', ','), str(huslejefraanna_sum).replace('.', ','), "", str(fasteudgifter_sum - alleandrekontobevægelser).replace(
@@ -344,32 +358,42 @@ class main_data_handler:
                                '.', ','), "", str(fasteudgifter_sum).replace('.', ','), str(husleje_sum).replace('.', ','), str(el_sum).replace('.', ','),
                            str(internet_sum).replace('.', ','), "", "", str(alleandrekontobevægelser).replace('.', ',')]
 
+            # update temp, to not overwrite old data
             temp += len(per_month_beloeber)
+            # next month
             mo += 1
 
         def calculate_sum(index_til_type):
+            # function to calculate the sum of elements at the specified index across all months
             dates = [jan, feb, mar, apr, maj,
                      jun, jul, aug, sep, okt, nov, dec]
             sum = 0
             index = 0
+            # iterate through each month's data
             for date in dates:
                 if date != ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]:
+                    # if the data for the current month is not empty, calculate the sum of elements at the specified index
                     sum = str(float(str(dates[index][index_til_type]).replace(
                         ",", ".")) + float(str(sum).replace(",", "."))).replace(".", ",")
                 index += 1
+            # return the sum
             return sum
 
         def sum_of_elems_in_list():
+            # function to calculate the sum of elements in a predefined list
             list = [resterende_total, fisOgBallade_total,
                     fastfood_total, indkoeb_total, mobilePay_total]
             sum = 0
+            # iterate through each element in the list
             for elem in list:
                 for strings in elem:
+                    # if the element is not none, add its numeric value (after replacing commas with dots for proper float conversion) to the sum
                     if strings is not None:
                         sum += float(strings.replace(".",
                                      "").replace(",", "."))
             return sum
 
+        # calculate the difference in the total transactions
         alleandrekontobevægelser_total = sum_of_elems_in_list()
 
         total = ["", calculate_sum(1), "N/A", "", "", calculate_sum(5), calculate_sum(6), calculate_sum(7), calculate_sum(8), calculate_sum(9), "", str(float(str(calculate_sum(13)).replace(",", ".")) -
