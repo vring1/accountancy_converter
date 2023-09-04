@@ -13,9 +13,12 @@ import tkinter as tk
 
 class MyGUI:
     def __init__(self):
+        # initializing window
         self.window = tk.Tk()
         self.window.geometry('400x400')
         self.window.title('Regnskabsconverter')
+
+        # variables to store user input
         self.year = tk.IntVar(value=2023)
         self.months = [tk.BooleanVar(value=False) for _ in range(12)]
         self.fetch_file_from_danske_bank = tk.BooleanVar(value=False)
@@ -23,6 +26,7 @@ class MyGUI:
         self.cpr = tk.StringVar()
         self.select_all = tk.BooleanVar(value=False)
 
+        # labels, entry widgets, and check buttons to get user input
         tk.Label(self.window, text="Year:").grid(row=0, column=0)
         tk.Entry(self.window, textvariable=self.year).grid(row=0, column=1)
 
@@ -43,12 +47,15 @@ class MyGUI:
         tk.Label(self.window, text="CPR:").grid(row=8, column=0)
         tk.Entry(self.window, textvariable=self.cpr).grid(row=8, column=1)
 
+        # "OK" button to execute 'okay' method
         tk.Button(self.window, text="OK", command=self.okay).grid(
             row=9, column=0, columnspan=2)
 
+        # starting the GUI main loop
         self.window.mainloop()
 
     def okay(self):
+        # retrieving the values of variables from the GUI
         year = self.year.get()
         months = [i+1 for i,
                   checked in enumerate(self.months) if checked.get()]
@@ -56,20 +63,28 @@ class MyGUI:
         mitID = self.mitID.get()
         cpr = self.cpr.get()
 
+        # handling raw data and getting dataframe
         raw_data_dataframe = raw_data_handler.handle_raw_data(
             months, year, fetch_file_from_danske_bank, cpr, mitID)[0]
+        
+        # handling main data and getting dataframe
         main_data_dataframe = main_data_handler.handle_main_data(months, year)
 
+        # creating an excel file with the processed data
         excel_handler.create_excel_file(
             months, year, raw_data_dataframe, main_data_dataframe)
 
+        # exit application and quit window
         self.window.destroy()
 
     def select_all_months(self):
+        # check if the "Select All" check button is checked (true)
         if self.select_all.get():
+            # if checked, set all month variables to true
             for var in self.months:
                 var.set(True)
         else:
+            # if unchecked, set all month variables to false
             for var in self.months:
                 var.set(False)
 
