@@ -3,6 +3,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
+from selenium.webdriver.firefox.options import Options
+import os
 import time
 
 
@@ -12,6 +14,7 @@ class get_csv_file_from_danske_bank:
 
         # open Firefox and navigate to the website
         driver = webdriver.Firefox()
+
         driver.get(url)
 
         wait = WebDriverWait(driver, 20)
@@ -125,3 +128,5 @@ class get_csv_file_from_danske_bank:
 
         # closer webdriver
         driver.close()
+        #driver.quit()
+

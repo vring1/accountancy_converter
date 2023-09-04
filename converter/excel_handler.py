@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-import xlsxwriter
+#import xlsxwriter
 
 # labels for the 'Nøgletal' sheet
 labels = ["", "Forskel i udgift/indtægt hver måned", "Penge på konto", "", "", "Indtægt i alt", "SU", "Løn", "Boligstøtte", "Husleje fra Anna", "",
