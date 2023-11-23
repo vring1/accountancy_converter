@@ -1,3 +1,7 @@
+# Accountancy Converter
+The accountancy converter is developed using Python. The program will fetch your desired data from Danske Bank (or from the latest configured .csv file from you downloads folder meeting specific criteria) and convert the data to a comprehensive excel spreadsheet. In this repository there is also a demo video of the program, although I did have to censor some sensitive data.
+
+## Guide to run program yourself
 If using anaconda, first activate environment:
 
     conda activate
